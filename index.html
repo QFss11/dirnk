@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body,.dirinks{
+            width: 100%;
+            height: 100%;
+        }
+        .dirinks{
+            display: flex;
+        }
+        .dirinks-classify{
+           width: 120px;
+           font-size: 14px;
+           background-color: #f3f3f3;
+           height: 100%;
+           overflow: hidden;
+        }
+        .dirinks-classify::-webkit-scrollbar {
+            width: 3px; /* 定义滚动条宽度 */
+        }
+        .dirinks-classify::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 6px;
+        }
+
+        .dirinks-classify::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        /* 定制 Firefox 中的滚动条样式 */
+        .dirinks-classify {
+            scrollbar-color: #888 #f1f1f1; /* thumb track */
+            scrollbar-width: thin;
+        }
+
+        .classify-item{
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            color: #282828;   
+        }
+        .classify-active{
+            background-color: #ffffff;
+            width: 100%;
+            border-radius: 25px 0 0 25px;
+            position: relative;
+        }
+        .classify-active::after{
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            background-color: #d8314d;
+            z-index: 9;
+            top: 40%;
+            left: 15px;
+        }
+
+        .dirinks-content{
+            width: calc(100% - 138px);
+            height: 100%;
+            overflow-y: auto;
+        }
+        .content-item{
+            width: 100%;
+            padding: 20px 0;
+            display: flex;
+        }
+        .dirinks-left{
+            width: 100px;
+            position: relative;
+        }
+        .dirinks-nohot{
+            position: absolute;
+            background-color: #e5ab77;
+            padding: 5px 8px;
+            border-radius: 0px 10px 0 10px;
+            top: 0;
+            right: 0px;
+            color: #fff;
+            font-size: 12px;
+            transform: scale(0.8);
+        }
+        .dirinks-hot{
+            position: absolute;
+            background-color: #d8314d;
+            padding: 5px 8px;
+            border-radius: 0px 10px 0 10px;
+            top: 0;
+            right: 0px;
+            color: #fff;
+            font-size: 12px;
+            transform: scale(0.8);
+        }
+        .dirinks-img{
+            width: 100px;
+            height: 80px;
+        }
+        .seriesName{
+           padding: 10px 0 0 20px;
+           font-weight: bold;
+           font-size: 14px;
+           position: relative;
+        }
+        .seriesName::after{
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 15px;
+            background-color: #d8314d;
+            z-index: 9;
+            top: 12px;
+            left: 12px;
+        }
+        .dirinks-name{
+            font-size: 14px;
+        }
+        .dirinks-tag-name{
+            display: flex;
+            margin: 5px 0;
+        }
+        .tag{
+            padding: 5px;
+            font-size: 12px;
+            color: #6a6a6a;
+            background-color: #f0f0f0;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+        .price-box{
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+        .price{
+            font-size: 14px;
+            color: #d8314d;
+        }
+        .operation{
+            display: flex;
+            align-items: center;
+        }
+        .add, .sub{
+           width: 20px;
+           height: 20px;
+           border-radius: 50%;
+           background-color: #d8314d;
+           position: relative;
+           cursor: pointer;
+        }
+        .add::before{
+            content: "";
+            width: 2px;
+            height: 15px;
+            background-color: #fff;
+            position: absolute;
+            top: 3px;
+            left: 45%;
+        }
+        .sub::after,.add::after{
+            content: "";
+            width: 2px;
+            height: 15px;
+            background-color: #fff;
+            position: absolute;
+            transform: rotate(90deg);
+            top: 3px;
+            left: 45%;
+        }
+
+        .num{
+            margin: 0 5px;
+        }
+        h1{
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dirinks">
+        <div class="dirinks-classify">
+        </div>
+        <div class="dirinks-content">
+            <div class="seriesName"></div>
+            <div class="content"></div>
+            <!-- <div class="content-item">
+                <div class="dirinks-left">
+                    <div class="dirinks-nohot">推荐</div>
+                    <img class="dirinks-img" src="./img/2.webp" alt="">
+                </div>
+                <div class="dirinks-right">
+                    <div class="dirinks-name">
+                        雷盛617西班牙千红(一箱四瓶)
+                    </div>
+                    <div class="dirinks-tag-name">
+                        <div class="tag">17%vol</div>
+                        <div class="tag">西班牙</div>
+                    </div>
+                    <div class="price-box">
+                        <div class="price">￥800.00</div>
+                        <div class="operation">
+                            <div class="add"></div>
+                            <div class="num">1</div>
+                            <div class="sub"></div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <script>
+        var classify = document.getElementsByClassName('dirinks-classify')[0]  
+        var seriesName = document.getElementsByClassName('seriesName')[0] 
+        var content = document.getElementsByClassName('content')[0]   
+        // 分类数据源
+        var classifyArr = [
+           {
+            classifyId:1,
+            classifyName:'爆款1-2系'
+           },
+           {
+            classifyId:2,
+            classifyName:'超值3系'
+           },
+           {
+            classifyId:3,
+            classifyName:'品质4系'
+           },
+           {
+            classifyId:4,
+            classifyName:'珍品5系'
+           },
+           {
+            classifyId:5,
+            classifyName:'收藏6系'
+           },
+           {
+            classifyId:6,
+            classifyName:'特级7系'
+           },
+           {
+            classifyId:7,
+            classifyName:'豪华8系'
+           },
+           {
+            classifyId:8,
+            classifyName:'传承9系'
+           },
+           {
+            classifyId:9,
+            classifyName:'特别系列'
+           },
+           {
+            classifyId:10,
+            classifyName:'限量系列'
+           },
+           {
+            classifyId:11,
+            classifyName:'烈酒系列'
+           }
+
+        ]
+        // 详情数据源
+        var seriesArr = [
+            {
+                id:0,
+                // 系列
+                classifyId:2,
+                imgUrl:'./img/2.webp',
+                name:'雷盛617西班牙千红',
+                remark:'一箱四瓶',
+                vol:'13%vol',
+                country:'西班牙',
+                counttryIcon:'',
+                price:800.00,
+                // 0 代表推荐,1代表热销
+                hot:0
+            },
+            {
+                id:1,
+                classifyId:1,
+                imgUrl:'./img/2.webp',
+                name:'雷盛617西班牙千红',
+                remark:'一箱四瓶',
+                vol:'13%vol',
+                country:'美国',
+                counttryIcon:'',
+                price:1800.00,
+                // 0 代表推荐,1代表热销
+                hot:0
+            },
+            {
+                id:2,
+                classifyId:4,
+                imgUrl:'./img/2.webp',
+                name:'雷盛617西班牙千红',
+                remark:'一箱四瓶',
+                vol:'13%vol',
+                country:'中国',
+                counttryIcon:'',
+                price:600.00,
+                // 0 代表推荐,1代表热销
+                hot:0
+            },
+            {
+                id:3,
+                classifyId:1,
+                imgUrl:'./img/2.webp',
+                name:'雷盛617西班牙千红',
+                remark:'一箱四瓶',
+                vol:'13%vol',
+                country:'西班牙',
+                counttryIcon:'',
+                price:700.00,
+                // 0 代表推荐,1代表热销
+                hot:0
+            },
+            {
+                id:4,
+                classifyId:8,
+                imgUrl:'./img/2.webp',
+                name:'雷盛617西班牙千红',
+                remark:'一箱四瓶',
+                vol:'13%vol',
+                country:'西班牙',
+                counttryIcon:'',
+                price:900.00,
+                // 0 代表推荐,1代表热销
+                hot:1
+            }
+        ]
+        // 分类内容
+        var classifyContent = '' 
+        // 将数据进行循环
+        for(let i = 0; i<classifyArr.length;i++){
+            classifyContent += `<div class="classify-item" classifyId="${classifyArr[i].classifyId}">${classifyArr[i].classifyName}</div>`
+        }
+        //显示到视图
+        classify.innerHTML = classifyContent
+
+        // 获取classify-item的列表
+        var classifyItem = document.getElementsByClassName('classify-item')
+        // 默认选中第一个
+        classifyItem[0].classList.add('classify-active')
+        // 将获取到的classify-item通过for循环赋予点击事件
+        for(let j=0;j<classifyItem.length;j++){
+            classifyItem[j].addEventListener('click',function(){
+                let classifyId = classifyItem[j].getAttribute('classifyId')
+                seriesName.innerText = classifyItem[j].innerText
+                currentActive(j)
+                filtersData(classifyId)
+            })
+        }
+
+        // 赋值高亮状态
+        function currentActive(index){
+            for(let k=0;k<classifyItem.length;k++){
+                // 
+                if(index===k) {
+                     // 当前点击赋予高亮状态
+                    classifyItem[k].classList.add('classify-active');
+                    continue
+                };
+                // 去除高亮状态
+                classifyItem[k].classList.remove('classify-active');
+            }
+        }
+       
+        // 通过classifyId过滤列表数据
+        function filtersData(classifyId){
+          var seriesFilterArr = seriesArr.filter((item)=>item.classifyId==classifyId)
+          var seriesFilterContent = ''
+          if(seriesFilterArr.length>0){
+            for(let w = 0; w<seriesFilterArr.length;w++){
+                seriesFilterContent += `<div class="content-item"> 
+                    <div class="dirinks-left">
+                        <div class="${seriesFilterArr[w].hot==0?'dirinks-nohot':'dirinks-hot'}">
+                            ${seriesFilterArr[w].hot==0?'推荐':'热销'}
+                        </div>
+                        <img class="dirinks-img" src="${seriesFilterArr[w].imgUrl}" alt="">
+                    </div>
+                    <div class="dirinks-right">
+                        <div class="dirinks-name">
+                            ${seriesFilterArr[w].name}(${seriesFilterArr[w].remark})
+                        </div>
+                        <div class="dirinks-tag-name">
+                            <div class="tag">${seriesFilterArr[w].vol}</div>
+                            <div class="tag">${seriesFilterArr[w].country}</div>
+                        </div>
+                        <div class="price-box">
+                            <div class="price">￥${seriesFilterArr[w].price}</div>
+                            <div class="operation">
+                                <div class="add"></div>
+                                <div class="num">1</div>
+                                <div class="sub"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            }
+            content.innerHTML = seriesFilterContent
+          }
+          else{
+            content.innerHTML = '<h1>暂无商品售卖</h1>'
+          }
+          
+        }
+        filtersData(classifyArr[0].classifyId)
+   </script>
+</body>
+</html>
